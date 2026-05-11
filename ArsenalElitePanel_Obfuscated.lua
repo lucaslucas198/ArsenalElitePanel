@@ -101,6 +101,7 @@ local _sr=_s(79,70,70)
 local _ss=_s(37,115,43)
 local _st=_s(118,97,108,105,100)
 local _su=_s(101,114,114,111,114)
+local _sv=_s(77,111,117,115,101,85,110,108,111,99,107)
 local _0x1=game:GetService(_q1)
 local _0x2=game:GetService(_q2)
 local _0x3=game:GetService(_q3)
@@ -336,4 +337,5 @@ _f2(_sd,_0x3.InputBegan,function(_i,_gp)
 if _gp then return end
 if _i.KeyCode==Enum.KeyCode.K and not _0xh.Visible then _0xf.Visible=not _0xf.Visible end
 end)
+_f2(_sv,_0x2.Heartbeat,function()if _0xh.Visible or _0xf.Visible then _0x3.MouseBehavior=Enum.MouseBehavior.Default end end)
 _f8(_sa)
