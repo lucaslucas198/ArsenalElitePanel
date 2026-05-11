@@ -26,30 +26,12 @@ if game.CreatorType == Enum.CreatorType.User and game.CreatorId ~= LocalPlayer.U
 	return
 end
 
-local LUARMOR_PROJECT_ID = "0f2149cedc512b999bca014db370b634"
-local CHECKPOINT_LINK    = "https://ads.luarmor.net/get_key?for=Arsenal_Elite_Key-VvoXkuVmhYsE"
+local mouseFree    = false
+local scriptLoaded = false
 
-local function validateKey(key)
-	local ok, response = pcall(function()
-		return game:HttpGet("https://api.luarmor.net/v3/projects/" .. LUARMOR_PROJECT_ID .. "/users?user_key=" .. key)
-	end)
-	if not ok then return false, "Connection failed." end
-
-	local ok2, data = pcall(function()
-		return game:GetService("HttpService"):JSONDecode(response)
-	end)
-	if not ok2 or type(data) ~= "table" then return false, "Invalid response." end
-
-	if data.valid then
-		return true, "Access granted."
-	elseif data.error == "KEY_EXPIRED" then
-		return false, "Key expired. Get a new key."
-	elseif data.error == "KEY_HWID_LOCKED" then
-		return false, "Key is locked to another device."
-	else
-		return false, "Invalid key."
-	end
-end
+local VALID_KEY = "SHB-AEP2-X7K4"
+local KEY_FILE  = "AEP_Key.txt"
+local EXP_FILE  = "AEP_Exp"
 
 local State = {
 	Connections = {},
@@ -306,100 +288,26 @@ local function makeSlider(parent, text, minVal, maxVal, default, callback)
 end
 
 
-local MainFrame  -- forward declared; assigned below after KeyFrame
-local showPage   -- forward declared; assigned below after pages are created
+local MainFrame  -- forward declared; assigned after SHK key entry
+local showPage   -- forward declared; assigned after pages are created
 
-local KeyFrame = create("Frame", {
-	AnchorPoint = Vector2.new(0.5, 0.5),
-	Position = UDim2.fromScale(0.5, 0.5),
-	Size = UDim2.fromOffset(440, 290),
-	BackgroundColor3 = Color3.fromRGB(18, 18, 28),
-	BorderSizePixel = 0,
-}, ScreenGui)
-create("UICorner", {CornerRadius = UDim.new(0, 10)}, KeyFrame)
-create("UIStroke", {Color = Color3.fromRGB(0, 190, 255), Transparency = 0.2}, KeyFrame)
-
-create("TextLabel", {
-	Position = UDim2.fromOffset(24, 18),
-	Size = UDim2.new(1, -48, 0, 30),
-	BackgroundTransparency = 1,
-	Text = "Arsenal Elite",
-	TextColor3 = Color3.fromRGB(255, 255, 255),
-	Font = Enum.Font.GothamBold,
-	TextSize = 24,
-	TextXAlignment = Enum.TextXAlignment.Left,
-}, KeyFrame)
-
-create("TextLabel", {
-	Position = UDim2.fromOffset(24, 50),
-	Size = UDim2.new(1, -48, 0, 20),
-	BackgroundTransparency = 1,
-	Text = "Enter your key below. Keys last 24 hours.",
-	TextColor3 = Color3.fromRGB(155, 165, 190),
-	Font = Enum.Font.Gotham,
-	TextSize = 13,
-	TextXAlignment = Enum.TextXAlignment.Left,
-}, KeyFrame)
-
-local KeyBox = create("TextBox", {
-	Position = UDim2.fromOffset(24, 86),
-	Size = UDim2.new(1, -48, 0, 42),
-	BackgroundColor3 = Color3.fromRGB(28, 30, 43),
-	BorderSizePixel = 0,
-	PlaceholderText = "Paste key here...",
-	Text = "",
-	TextColor3 = Color3.fromRGB(245, 245, 255),
-	PlaceholderColor3 = Color3.fromRGB(100, 110, 135),
-	Font = Enum.Font.GothamMedium,
-	TextSize = 14,
-	ClearTextOnFocus = false,
-}, KeyFrame)
-create("UICorner", {CornerRadius = UDim.new(0, 7)}, KeyBox)
-
-local KeyBtnHolder = create("Frame", {
-	Position = UDim2.fromOffset(24, 144),
-	Size = UDim2.new(1, -48, 0, 120),
-	BackgroundTransparency = 1,
-}, KeyFrame)
-create("UIListLayout", {Padding = UDim.new(0, 8), SortOrder = Enum.SortOrder.LayoutOrder}, KeyBtnHolder)
-
-local GetKeyBtn  = makeButton(KeyBtnHolder, "Get Key (opens Linkvertise)")
-local EnterBtn   = makeButton(KeyBtnHolder, "Submit Key")
-
-GetKeyBtn.MouseButton1Click:Connect(function()
-	pcall(function() setclipboard(CHECKPOINT_LINK) end)
-	notify("Link copied! Paste it in your browser, complete the 2 tasks, then come back with your key.")
-end)
-
-local submitting = false
-EnterBtn.MouseButton1Click:Connect(function()
-	if submitting then return end
-	local key = KeyBox.Text:gsub("%s+", "")
-	if #key < 8 then notify("Key too short.") return end
-
-	submitting = true
-	EnterBtn.Text = "Checking..."
-
-	local valid, msg = validateKey(key)
-
-	if valid then
-		TweenService:Create(KeyFrame, TweenInfo.new(0.2), {
-			BackgroundTransparency = 1,
-			Position = UDim2.fromScale(0.5, 0.47),
-		}):Play()
-		task.wait(0.22)
-		KeyFrame.Visible = false
+-- Load and show the ScriptingHub premium key system
+local SHK = loadstring(game:HttpGet("https://raw.githubusercontent.com/lucaslucas198/ScriptingHubKeySystem/main/KeySystem.lua"))()
+SHK.show({
+	ScriptName  = "Arsenal Elite",
+	KeyFile     = KEY_FILE,
+	ExpFile     = EXP_FILE,
+	IsFPS       = true,
+	ValidKey    = VALID_KEY,
+	OnSuccess   = function()
+		scriptLoaded      = true
 		MainFrame.Visible = true
 		MainFrame.BackgroundTransparency = 1
-		TweenService:Create(MainFrame, TweenInfo.new(0.2), {BackgroundTransparency = 0}):Play()
+		TweenService:Create(MainFrame, TweenInfo.new(0.22), {BackgroundTransparency = 0}):Play()
 		showPage("Movement")
 		notify("Access granted. Arsenal Elite loaded.")
-	else
-		notify(msg)
-		EnterBtn.Text = "Submit Key"
-		submitting = false
-	end
-end)
+	end,
+})
 
 MainFrame = create("Frame", {
 	Visible = false,
@@ -786,8 +694,20 @@ end)
 
 connect("ToggleUI", UserInputService.InputBegan, function(input, gameProcessed)
 	if gameProcessed then return end
-	if input.KeyCode == Enum.KeyCode.K and not KeyFrame.Visible then
+	if input.KeyCode == Enum.KeyCode.K and scriptLoaded then
 		MainFrame.Visible = not MainFrame.Visible
+	end
+	if input.KeyCode == Enum.KeyCode.T then
+		mouseFree = not mouseFree
+		if not mouseFree then
+			UserInputService.MouseBehavior = Enum.MouseBehavior.LockCenter
+		end
+	end
+end)
+
+connect("MouseUnlock", RunService.Heartbeat, function()
+	if MainFrame.Visible or mouseFree then
+		UserInputService.MouseBehavior = Enum.MouseBehavior.Default
 	end
 end)
 
