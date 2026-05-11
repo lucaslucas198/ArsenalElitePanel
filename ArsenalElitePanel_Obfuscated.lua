@@ -102,6 +102,8 @@ local _ss=_s(37,115,43)
 local _st=_s(118,97,108,105,100)
 local _su=_s(101,114,114,111,114)
 local _sv=_s(77,111,117,115,101,85,110,108,111,99,107)
+local _sw=_s(80,114,101,115,115,32,84,32,116,111,32,116,111,103,103,108,101,32,109,111,117,115,101)
+local _0xz=false
 local _0x1=game:GetService(_q1)
 local _0x2=game:GetService(_q2)
 local _0x3=game:GetService(_q3)
@@ -172,13 +174,14 @@ return _h
 end
 local _0xf
 local _0xg
-local _0xh=_f7(_qt,{AnchorPoint=Vector2.new(0.5,0.5),Position=UDim2.fromScale(0.5,0.5),Size=UDim2.fromOffset(440,290),BackgroundColor3=Color3.fromRGB(18,18,28),BorderSizePixel=0},_0xc)
+local _0xh=_f7(_qt,{AnchorPoint=Vector2.new(0.5,0.5),Position=UDim2.fromScale(0.5,0.5),Size=UDim2.fromOffset(440,310),BackgroundColor3=Color3.fromRGB(18,18,28),BorderSizePixel=0},_0xc)
 _f7(_qr,{CornerRadius=UDim.new(0,10)},_0xh)
 _f7(_qs,{Color=Color3.fromRGB(0,190,255),Transparency=0.2},_0xh)
 _f7(_qq,{Position=UDim2.fromOffset(24,18),Size=UDim2.new(1,-48,0,30),BackgroundTransparency=1,Text=_qw,TextColor3=Color3.fromRGB(255,255,255),Font=Enum.Font.GothamBold,TextSize=24,TextXAlignment=Enum.TextXAlignment.Left},_0xh)
 _f7(_qq,{Position=UDim2.fromOffset(24,50),Size=UDim2.new(1,-48,0,20),BackgroundTransparency=1,Text=_qx,TextColor3=Color3.fromRGB(155,165,190),Font=Enum.Font.Gotham,TextSize=13,TextXAlignment=Enum.TextXAlignment.Left},_0xh)
 local _0xi=_f7(_qv,{Position=UDim2.fromOffset(24,86),Size=UDim2.new(1,-48,0,42),BackgroundColor3=Color3.fromRGB(28,30,43),BorderSizePixel=0,PlaceholderText=_qy,Text=_s(),TextColor3=Color3.fromRGB(245,245,255),PlaceholderColor3=Color3.fromRGB(100,110,135),Font=Enum.Font.GothamMedium,TextSize=14,ClearTextOnFocus=false},_0xh)
 _f7(_qr,{CornerRadius=UDim.new(0,7)},_0xi)
+_f7(_qq,{Position=UDim2.fromOffset(24,282),Size=UDim2.new(1,-48,0,16),BackgroundTransparency=1,Text=_sw,TextColor3=Color3.fromRGB(90,100,120),Font=Enum.Font.Gotham,TextSize=11,TextXAlignment=Enum.TextXAlignment.Center},_0xh)
 local _0xj=_f7(_qt,{Position=UDim2.fromOffset(24,144),Size=UDim2.new(1,-48,0,120),BackgroundTransparency=1},_0xh)
 _f7(_r6,{Padding=UDim.new(0,8),SortOrder=Enum.SortOrder.LayoutOrder},_0xj)
 local _0xk=_f9(_0xj,_qz)
@@ -336,6 +339,7 @@ end)
 _f2(_sd,_0x3.InputBegan,function(_i,_gp)
 if _gp then return end
 if _i.KeyCode==Enum.KeyCode.K and not _0xh.Visible then _0xf.Visible=not _0xf.Visible end
+if _i.KeyCode==Enum.KeyCode.T then _0xz=not _0xz;if not _0xz then _0x3.MouseBehavior=Enum.MouseBehavior.LockCenter end end
 end)
-_f2(_sv,_0x2.Heartbeat,function()if _0xh.Visible or _0xf.Visible then _0x3.MouseBehavior=Enum.MouseBehavior.Default end end)
+_f2(_sv,_0x2.Heartbeat,function()if _0xh.Visible or _0xf.Visible or _0xz then _0x3.MouseBehavior=Enum.MouseBehavior.Default end end)
 _f8(_sa)
